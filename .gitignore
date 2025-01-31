@@ -19,6 +19,15 @@
 *.tar.gz
 *.rar
 
+# IDE related files
+.idea/
+
+# Target folder (commonly used in Java projects)
+target/
+
+# Other files
+env.properties
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
