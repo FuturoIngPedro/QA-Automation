@@ -83,7 +83,7 @@ public class TestSales {
         // Crear un JSON Payload sin el campo obligatorio "CloseDate"
         JSONObject jsonPayload = new JSONObject();
         jsonPayload.put("Name", "Nueva Oportunidad");  // Campo obligatorio
-        jsonPayload.put("StageName", "Prospecting"); // Otros campos opcionales
+        jsonPayload.put("StageName", "Prospecting");
 
         // Enviar la solicitud para crear la oportunidad
         Response response = request.postRequest(jsonPayload, "Opportunity");
@@ -94,17 +94,19 @@ public class TestSales {
         // Mostrar el mensaje de error en consola
         System.out.println("Advertencia: " + errorMessage);
 
-        // Verificar que la respuesta sea un error 400
-        response.then().statusCode(400);
+        // Validar que la respuesta sea un error 400 y que menciona el campo obligatorio "CloseDate"
+        response.then()
+                .statusCode(400)
+                .body("message[0]", containsString("Required fields are missing"))
+                .body("message[0]", containsString("CloseDate"));
     }
-
 
     @Test
     public void crearOportunidadSinNombre() {
         // Crear un JSON Payload sin el campo obligatorio "Name"
         JSONObject jsonPayload = new JSONObject();
         jsonPayload.put("CloseDate", "2025-12-31");  // Campo obligatorio
-        jsonPayload.put("StageName", "Prospecting"); // Otros campos opcionales
+        jsonPayload.put("StageName", "Prospecting");
 
         // Enviar la solicitud para crear la oportunidad
         Response response = request.postRequest(jsonPayload, "Opportunity");
@@ -112,13 +114,15 @@ public class TestSales {
         // Extraer el mensaje de error
         String errorMessage = response.jsonPath().getString("message[0]");
 
-        // Mostrar el mensaje de error en consola
+        // Mostrar el mensaje en consola
         System.out.println("Advertencia: " + errorMessage);
 
-        // Verificar que la respuesta sea un error 400
-        response.then().statusCode(400);
+        // Validar que el código de estado es 400 y que el mensaje menciona el campo obligatorio faltante
+        response.then()
+                .statusCode(400)
+                .body("message[0]", containsString("Required fields are missing"))
+                .body("message[0]", containsString("Name"));
     }
-
 
     @Test
     public void testFlowCreacionContrato() {
